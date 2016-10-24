@@ -71,7 +71,7 @@ objects:
           - --override
           - zookeeper.connect=${ZOOKEEPER_SERVICE}
           - --override
-          - advertised.host.name=${OBJECT_NAME_PREFIX}-1
+          - advertised.host.name=${OBJECT_NAME_PREFIX}-1-hep.apps.ota.ose.rabobank.nl
           - --override
           - broker.id=0
           volumeMounts:
@@ -118,7 +118,7 @@ objects:
           - --override
           - zookeeper.connect=${ZOOKEEPER_SERVICE}
           - --override
-          - advertised.host.name=${OBJECT_NAME_PREFIX}-2
+          - advertised.host.name=${OBJECT_NAME_PREFIX}-2-hep.apps.ota.ose.rabobank.nl
           - --override
           - broker.id=1
           volumeMounts:
