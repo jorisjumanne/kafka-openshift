@@ -9,6 +9,7 @@ RUN mkdir -p /opt/kafka \
   && yum clean all \
   && rm /etc/yum.repos.d/rhel7.repo
 COPY bin/*.sh /opt/kafka/bin/
+COPY lib/*.jar /opt/kafka/libs/
 COPY config/* /opt/kafka/config/
 RUN chmod -R a=u /opt/kafka
 WORKDIR /opt/kafka
