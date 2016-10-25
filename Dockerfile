@@ -12,6 +12,7 @@ COPY bin/*.sh /opt/kafka/bin/
 COPY lib/*.jar /opt/kafka/libs/
 COPY config/* /opt/kafka/config/
 RUN chmod -R a=u /opt/kafka
+RUN chmod -R a+rx /opt/kafka/bin/*
 WORKDIR /opt/kafka
 VOLUME /tmp/kafka-logs /tmp/zookeeper
 EXPOSE 2181 2888 3888 9092
