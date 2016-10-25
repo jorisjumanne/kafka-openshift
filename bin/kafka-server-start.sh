@@ -33,7 +33,7 @@ EXTRA_ARGS=${EXTRA_ARGS-'-name kafkaServer -loggc'}
 
 
 echo "Generate Kafka Broker ID: for $HOSTNAME"
-ID=`bin/kafka-run-class.sh kafka.admin.AutoExpandCommand --zookeeper=${KAFKANETES_ZK_SERVICE_HOST}:${KAFKANETES_ZK_SERVICE_PORT} -broker=${HOSTNAME} -mode=generate`
+ID=`bin/kafka-run-class.sh kafka.admin.AutoExpandCommand --zookeeper=${KAFKANETES_ZK_SERVICE_HOST}:${KAFKANETES_ZK_SERVICE_PORT} -broker=${HOSTNAME} -mode=generate |tail -n1`
 if [[ -z "$ID" ]]; then
     echo "Got empty broker ID from kafka.admin.AutoExpandCommand; not starting!"
     exit 1
@@ -42,10 +42,10 @@ echo "Use broker ID: $ID"
 export KAFKA_BROKER_ID=$ID
 
 
-envsubst <config/server.properties.tpl >config/server.properties
+/usr/bin/envsubst <config/server.properties.tpl >config/server.properties
 
 if [[ -n "$ENABLE_AUTO_EXTEND" ]]; then
-    echo "Enable auto exand"
+    echo "Enable auto extend"
     bin/kafka-autoextend-partitions.sh &
 fi
 
