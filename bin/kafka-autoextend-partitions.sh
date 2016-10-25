@@ -25,4 +25,4 @@ if $start_timeout_exceeded; then
     exit 1
 fi
 
-$KAFKA_HOME/bin/kafka-run-class.sh kafka.admin.AutoExpandCommand --zookeeper=$KAFKA_ZOOKEEPER_CONNECT --broker=$KAFKA_BROKER_ID --mode=monitor
+$KAFKA_HOME/bin/kafka-run-class.sh kafka.admin.AutoExpandCommand --zookeeper=${KAFKANETES_ZK_SERVICE_HOST}:${KAFKANETES_ZK_SERVICE_PORT} --broker=$KAFKA_BROKER_ID --mode=monitor
