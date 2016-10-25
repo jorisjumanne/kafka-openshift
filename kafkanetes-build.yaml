@@ -10,7 +10,7 @@ parameters:
 - name: SOURCE_REPOSITORY_URL
   description: The URL of the Git repository with the Kafkanetes Dockerfile
   required: true
-  value: https://github.com/jim-minter/kafkanetes.git
+  value: https://git.eu.rabonet.com/polaris/kafkanetes.git
 - name: OBJECT_NAME_PREFIX
   description: Name prefix for each object created
   required: true
