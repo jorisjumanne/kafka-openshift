@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  creationTimestamp: null
+  labels:
+    run: zookeeper-webui
+  name: zookeeper-webui
+spec:
+  replicas: 1
+  selector:
+    run: zookeeper-webui
+  strategy:
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: zookeeper-webui
+    spec:
+      containers:
+      - env:
+        - name: ZK_DEFAULT_NODE
+          value: kafkanetes-zk:2181
+        image: 192.168.173.195:5000/hep/zookeeper-webui:latest
+        imagePullPolicy: Always
+        name: zookeeper-webui
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - type: ConfigChange
+status: {}
