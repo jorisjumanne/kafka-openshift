@@ -1,4 +1,5 @@
 FROM rhel
+ENV ENABLE_AUTO_EXTEND true
 RUN mkdir -p /opt/kafka \
   && cd /opt/kafka \
   && ln -s /var/run/secrets/rhel7.repo /etc/yum.repos.d/rhel7.repo \
@@ -7,7 +8,8 @@ RUN mkdir -p /opt/kafka \
   && yum -y remove tar \
   && yum clean all \
   && rm /etc/yum.repos.d/rhel7.repo
-COPY zookeeper-server-start-multiple.sh /opt/kafka/bin/
+COPY bin/*.sh /opt/kafka/bin/
+COPY config/* /opt/kafka/config/
 RUN chmod -R a=u /opt/kafka
 WORKDIR /opt/kafka
 VOLUME /tmp/kafka-logs /tmp/zookeeper

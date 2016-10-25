@@ -71,9 +71,27 @@ objects:
           - --override
           - zookeeper.connect=${ZOOKEEPER_SERVICE}
           - --override
-          - advertised.listeners=PLAINTEXT://${OBJECT_NAME_PREFIX}-1-hep.apps.ota.ose.rabobank.nl:80
+          - advertised.listeners=SSL://${OBJECT_NAME_PREFIX}-1-hep.apps.ota.ose.rabobank.nl:443
           - --override
           - broker.id=0
+          - --override
+          - ssl.keystore.password=notsecret
+          - --override
+          - ssl.key.password=notsecret
+          - --override
+          - ssl.truststore.password=notsecret
+          - --override
+          - ssl.keystore.location=/security/server.keystore.jks
+          - --override
+          - ssl.truststore.location=/security/server.truststore.jks
+          - --override
+          - ssl.client.auth=requested
+          - --override
+          - security.inter.broker.protocol=SSL
+          - --override
+          - authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
+          - --override
+          - allow.everyone.if.no.acl.found=true
           volumeMounts:
           - mountPath: /tmp/kafka-logs
             name: kafka-logs
