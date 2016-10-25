@@ -3,7 +3,7 @@ ENV ENABLE_AUTO_EXTEND true
 RUN mkdir -p /opt/kafka \
   && cd /opt/kafka \
   && ln -s /var/run/secrets/rhel7.repo /etc/yum.repos.d/rhel7.repo \
-  && yum -y install java-1.8.0-openjdk-headless tar \
+  && yum -y install java-1.8.0-openjdk-headless tar gettext \
   && curl -s http://www.mirrorservice.org/sites/ftp.apache.org/kafka/0.10.1.0/kafka_2.11-0.10.1.0.tgz | tar -xz --strip-components=1 \
   && yum -y remove tar \
   && yum clean all \
