@@ -63,6 +63,7 @@ log.dir=/tmp/kafka-logs/${HOSTNAME}
 # The default number of log partitions per topic. More partitions allow greater
 # parallelism for consumption, but this will also result in more files across
 # the brokers.
+#
 num.partitions=12
 
 # The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.
