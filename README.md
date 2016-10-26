@@ -1,5 +1,12 @@
 # "Kafkanetes"
 
+```bash
+oc create -n openshift -f kafka-openshift.yaml
+oc secrets new ssl ssl
+oc new-app --template=kafkanetes
+oc policy add-role-to-user admin -z broker-discovery
+```
+
 Run [Apache Kafka](https://kafka.apache.org/) and [Apache ZooKeeper](https://zookeeper.apache.org/) on [OpenShift v3](https://www.openshift.com/).
 
 Proof of concept; builds following architectures:

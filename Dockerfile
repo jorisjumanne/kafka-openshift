@@ -1,4 +1,4 @@
-FROM rhel
+FROM rhel7
 ENV ENABLE_AUTO_EXTEND true
 RUN mkdir -p /opt/kafka \
   && cd /opt/kafka \
