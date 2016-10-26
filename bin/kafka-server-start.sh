@@ -41,7 +41,6 @@ fi
 echo "Use broker ID: $ID"
 export KAFKA_BROKER_ID=$ID
 
-
 /usr/bin/envsubst <config/server.properties.tpl >config/server.properties
 
 if [[ -n "$ENABLE_AUTO_EXTEND" ]]; then
