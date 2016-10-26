@@ -1,0 +1,723 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: kafkanetes
+objects:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: broker-discovery
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: zookeeperwebui
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    generation: 1
+    labels:
+      app: kafkanetes
+    name: kafkanetes
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    generation: 1
+    labels:
+      app: broker-discovery
+    name: broker-discovery
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    generation: 1
+    labels:
+      app: zookeeper-webui
+    name: zookeeper-webui
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: kafka
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 512Mi
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: kafkanetes-zk-1
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 512Mi
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: kafkanetes-zk-2
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 512Mi
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: kafkanetes-zk-3
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 512Mi
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: zookeeper-webui
+    name: zookeeper-webui
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: zookeeper-webui:latest
+    postCommit: {}
+    resources: {}
+    source:
+      git:
+        ref: master
+        uri: https://git.eu.rabonet.com/polaris/zookeeper-webui.git
+      secrets: []
+      type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: s2i-oracle-java-dev-rhel:latest
+          namespace: openshift
+      type: Docker
+    triggers:
+    - github:
+        secret: a2lWoVscJ95f2BajsV4I
+      type: GitHub
+    - generic:
+        secret: Xf3D-PkW0GruFwJuU0I6
+      type: Generic
+    - type: ConfigChange
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: kafkanetes
+    name: kafkanetes
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: kafkanetes:latest
+    postCommit: {}
+    resources: {}
+    source:
+      git:
+        uri: https://git.eu.rabonet.com/polaris/kafkanetes.git
+      type: Git
+    strategy:
+      dockerStrategy:
+        env:
+        - name: http_proxy
+          value: http://proxy.linux.rabobank.nl:3128
+        - name: https_proxy
+          value: http://proxy.linux.rabobank.nl:3128
+        - name: HTTPS_PROXY
+          value: http://proxy.linux.rabobank.nl:3128
+        - name: no_proxy
+          value: .rabobank.nl,.rabobank.com,.rabonet.com
+        - name: HTTP_PROXY
+          value: http://proxy.linux.rabobank.nl:3128
+      type: Docker
+    triggers:
+    - type: ConfigChange
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: broker-discovery
+    name: broker-discovery
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: broker-discovery:latest
+    postCommit: {}
+    resources: {}
+    source:
+      git:
+        uri: https://git.eu.rabonet.com/polaris/broker-discovery.git
+      secrets: []
+      type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: rhel7:latest
+          namespace: openshift
+      type: Docker
+    triggers:
+    - github:
+        secret: Nr8YVD3ZD8NfGRLBdmSH
+      type: GitHub
+    - generic:
+        secret: zEdmg0w7C6NW4G-WbD0W
+      type: Generic
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: zookeeper-webui
+    name: zookeeper-webui
+  spec:
+    replicas: 1
+    selector:
+      app: zookeeper-webui
+      deploymentconfig: zookeeper-webui
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: zookeeper-webui
+          deploymentconfig: zookeeper-webui
+      spec:
+        containers:
+        - env:
+          - name: ZK_DEFAULT_NODE
+            value: kafkanetes-zk:2181
+          image: zookeeper-webui:latest
+          imagePullPolicy: Always
+          name: zookeeper-webui
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - zookeeper-webui
+        from:
+          kind: ImageStreamTag
+          name: zookeeper-webui:latest
+      type: ImageChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: kafka
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: kafka
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: kafka
+          broker-discovery: "yes"
+          deploymentconfig: kafka
+      spec:
+        containers:
+        - args:
+          - config/server.properties
+          - --override
+          - ssl.keystore.password=notsecret
+          - --override
+          - ssl.key.password=notsecret
+          - --override
+          - ssl.truststore.password=notsecret
+          - --override
+          - ssl.keystore.location=/security/server.keystore.jks
+          - --override
+          - ssl.truststore.location=/security/server.truststore.jks
+          - --override
+          - ssl.client.auth=requested
+          - --override
+          - security.inter.broker.protocol=SSL
+          - --override
+          - authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
+          - --override
+          - allow.everyone.if.no.acl.found=true
+          command:
+          - bash
+          - -x
+          - bin/kafka-server-start.sh
+          image: kafkanetes:latest
+          imagePullPolicy: Always
+          name: kafkanetes
+          ports:
+          - containerPort: 9092
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /tmp/kafka-logs
+            name: kafka-logs
+          - mountPath: /security
+            name: kafka-keystores
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: kafka-logs
+          persistentVolumeClaim:
+            claimName: kafka
+        - name: kafka-keystores
+          secret:
+            secretName: ssl
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        containerNames:
+        - kafkanetes
+        from:
+          kind: ImageStreamTag
+          name: kafkanetes:latest
+      type: ImageChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: broker-discovery
+    name: broker-discovery
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: broker-discovery
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/container.broker-discovery.image.entrypoint: '["/bin/bash"]'
+        labels:
+          app: broker-discovery
+          deploymentconfig: broker-discovery
+      spec:
+        containers:
+        - env:
+          - name: FILTER
+            value: broker-discovery=yes
+          image: broker-discovery:latest
+          imagePullPolicy: Always
+          name: broker-discovery
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        serviceAccount: broker-discovery
+        serviceAccountName: broker-discovery
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - broker-discovery
+        from:
+          kind: ImageStreamTag
+          name: broker-discovery:latest
+      type: ImageChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: kafkanetes-debug
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: kafkanetes-debug
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          deploymentconfig: kafkanetes-debug
+      spec:
+        containers:
+        - args:
+          - -c
+          - import signal; signal.pause()
+          command:
+          - python
+          env:
+          - name: KAFKA_HEAP_OPTS
+            value: -Xmx1024M
+          image: kafkanetes:latest
+          imagePullPolicy: Always
+          name: kafkanetes
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        containerNames:
+        - kafkanetes
+        from:
+          kind: ImageStreamTag
+          name: kafkanetes:latest
+      type: ImageChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: kafkanetes-zk-1
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: kafkanetes-zk-1
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: kafkanetes-zk
+          service: kafkanetes-zk
+          deploymentconfig: kafkanetes-zk-1
+      spec:
+        containers:
+        - args:
+          - config/zookeeper.properties
+          - kafkanetes-zk
+          - "1"
+          - "3"
+          command:
+          - bin/zookeeper-server-start-multiple.sh
+          image: kafkanetes:latest
+          imagePullPolicy: Always
+          name: kafkanetes
+          ports:
+          - containerPort: 2181
+            protocol: TCP
+          - containerPort: 2888
+            protocol: TCP
+          - containerPort: 3888
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /tmp/zookeeper
+            name: zookeeper
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: zookeeper
+          persistentVolumeClaim:
+            claimName: kafkanetes-zk-1
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        containerNames:
+        - kafkanetes
+        from:
+          kind: ImageStreamTag
+          name: kafkanetes:latest
+      type: ImageChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: kafkanetes-zk-2
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: kafkanetes-zk-2
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: kafkanetes-zk
+          service: kafkanetes-zk
+          deploymentconfig: kafkanetes-zk-2
+      spec:
+        containers:
+        - args:
+          - config/zookeeper.properties
+          - kafkanetes-zk
+          - "2"
+          - "3"
+          command:
+          - bin/zookeeper-server-start-multiple.sh
+          image: kafkanetes:latest
+          imagePullPolicy: Always
+          name: kafkanetes
+          ports:
+          - containerPort: 2181
+            protocol: TCP
+          - containerPort: 2888
+            protocol: TCP
+          - containerPort: 3888
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /tmp/zookeeper
+            name: zookeeper
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: zookeeper
+          persistentVolumeClaim:
+            claimName: kafkanetes-zk-2
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        containerNames:
+        - kafkanetes
+        from:
+          kind: ImageStreamTag
+          name: kafkanetes:latest
+      type: ImageChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: kafkanetes-zk-3
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: kafkanetes-zk-3
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: kafkanetes-zk
+          service: kafkanetes-zk
+          deploymentconfig: kafkanetes-zk-3
+      spec:
+        containers:
+        - args:
+          - config/zookeeper.properties
+          - kafkanetes-zk
+          - "3"
+          - "3"
+          command:
+          - bin/zookeeper-server-start-multiple.sh
+          image: kafkanetes:latest
+          imagePullPolicy: Always
+          name: kafkanetes
+          ports:
+          - containerPort: 2181
+            protocol: TCP
+          - containerPort: 2888
+            protocol: TCP
+          - containerPort: 3888
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /tmp/zookeeper
+            name: zookeeper
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: zookeeper
+          persistentVolumeClaim:
+            claimName: kafkanetes-zk-3
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        containerNames:
+        - kafkanetes
+        from:
+          kind: ImageStreamTag
+          name: kafkanetes:latest
+      type: ImageChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: kafkanetes-zk
+  spec:
+    ports:
+    - name: 2181-tcp
+      port: 2181
+      protocol: TCP
+      targetPort: 2181
+    - name: 2888-tcp
+      port: 2888
+      protocol: TCP
+      targetPort: 2888
+    - name: 3888-tcp
+      port: 3888
+      protocol: TCP
+      targetPort: 3888
+    selector:
+      service: kafkanetes-zk
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: kafkanetes-zk-1
+  spec:
+    ports:
+    - name: 2181-tcp
+      port: 2181
+      protocol: TCP
+      targetPort: 2181
+    - name: 2888-tcp
+      port: 2888
+      protocol: TCP
+      targetPort: 2888
+    - name: 3888-tcp
+      port: 3888
+      protocol: TCP
+      targetPort: 3888
+    selector:
+      deploymentconfig: kafkanetes-zk-1
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: kafkanetes-zk-2
+  spec:
+    ports:
+    - name: 2181-tcp
+      port: 2181
+      protocol: TCP
+      targetPort: 2181
+    - name: 2888-tcp
+      port: 2888
+      protocol: TCP
+      targetPort: 2888
+    - name: 3888-tcp
+      port: 3888
+      protocol: TCP
+      targetPort: 3888
+    selector:
+      deploymentconfig: kafkanetes-zk-2
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: kafkanetes-zk-3
+  spec:
+    ports:
+    - name: 2181-tcp
+      port: 2181
+      protocol: TCP
+      targetPort: 2181
+    - name: 2888-tcp
+      port: 2888
+      protocol: TCP
+      targetPort: 2888
+    - name: 3888-tcp
+      port: 3888
+      protocol: TCP
+      targetPort: 3888
+    selector:
+      deploymentconfig: kafkanetes-zk-3
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      run: zookeeper-webui
+    name: zookeeper-webui
+  spec:
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentconfig: zookeeper-webui
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Route
+  metadata:
+    labels:
+      run: zookeeper-webui
+    name: zookeeper-webui
+  spec:
+    to:
+      kind: Service
+      name: zookeeper-webui
