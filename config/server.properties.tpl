@@ -64,7 +64,7 @@ log.dir=/tmp/kafka-logs/${HOSTNAME}
 # parallelism for consumption, but this will also result in more files across
 # the brokers.
 #
-num.partitions=12
+num.partitions=${NUM_PARTITIONS}
 
 # The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.
 # This value is recommended to be increased for installations with data dirs located in RAID array.
