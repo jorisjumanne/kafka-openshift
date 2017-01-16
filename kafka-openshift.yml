@@ -95,7 +95,7 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: openshift/wildfly-81-centos7
+          name: wildfly-81-centos7:latest
           namespace: openshift
       type: Docker
     triggers:
@@ -147,7 +147,7 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: centos7
+          name: centos7:latest
           namespace: openshift
       type: Docker
     triggers:
