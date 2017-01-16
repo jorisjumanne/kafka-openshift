@@ -260,6 +260,13 @@ objects:
           ports:
           - containerPort: 9092
             protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 9092
+            timeoutSeconds: 1
           resources: {}
           terminationMessagePath: /dev/termination-log
           volumeMounts:
@@ -270,13 +277,6 @@ objects:
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         securityContext: {}
-        readinessProbe:
-          failureThreshold: 3
-          periodSeconds: 10
-          successThreshold: 1
-          tcpSocket:
-            port: 9092
-          timeoutSeconds: 1
         terminationGracePeriodSeconds: 30
         volumes:
         - name: kafka-logs
@@ -331,16 +331,16 @@ objects:
           name: broker-discovery
           resources: {}
           terminationMessagePath: /dev/termination-log
+          readinessProbe:
+            exec:
+              command:
+              - ps -ef | grep "[w]atch.sh"
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
         dnsPolicy: ClusterFirst
         restartPolicy: Always
-        readinessProbe:
-          exec:
-            command:
-            - ps -ef | grep "[w]atch.sh"
-          failureThreshold: 3
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 1
         securityContext: {}
         serviceAccount: broker-discovery
         serviceAccountName: broker-discovery
@@ -392,15 +392,15 @@ objects:
           name: kafkanetes
           resources: {}
           terminationMessagePath: /dev/termination-log
+          readinessProbe:
+            exec:
+              command:
+              - ps -ef | grep "[p]ython"
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
         dnsPolicy: ClusterFirst
-        readinessProbe:
-          exec:
-            command:
-            - ps -ef | grep "[p]ython"
-          failureThreshold: 3
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 1
         restartPolicy: Always
         securityContext: {}
         terminationGracePeriodSeconds: 30
@@ -456,6 +456,13 @@ objects:
             protocol: TCP
           - containerPort: 3888
             protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 2181
+            timeoutSeconds: 1
           resources: {}
           terminationMessagePath: /dev/termination-log
           volumeMounts:
@@ -531,6 +538,13 @@ objects:
             protocol: TCP
           - containerPort: 3888
             protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 2181
+            timeoutSeconds: 1
           resources: {}
           terminationMessagePath: /dev/termination-log
           volumeMounts:
@@ -596,6 +610,13 @@ objects:
             protocol: TCP
           - containerPort: 3888
             protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 2181
+            timeoutSeconds: 1
           resources: {}
           terminationMessagePath: /dev/termination-log
           volumeMounts:
