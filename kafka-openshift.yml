@@ -123,6 +123,9 @@ objects:
       git:
         uri: https://meijerj@git.rabobank.nl/scm/~meijerj/kafka-openshift.git
       type: Git
+    strategy:
+      dockerStrategy:
+      type: Docker
     triggers:
     - type: ConfigChange
 - apiVersion: v1
