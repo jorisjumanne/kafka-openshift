@@ -147,7 +147,7 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: centos:latest
+          name: centos7
           namespace: openshift
       type: Docker
     triggers:
