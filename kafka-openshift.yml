@@ -150,7 +150,7 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: centos7:latest
+          name: centos:7
           namespace: kafka
       type: Docker
     triggers:

@@ -1,4 +1,4 @@
-FROM centos7
+FROM centos:7
 ENV ENABLE_AUTO_EXTEND true
 ENV NUM_PARTITIONS 12
 RUN mkdir -p /opt/kafka \
