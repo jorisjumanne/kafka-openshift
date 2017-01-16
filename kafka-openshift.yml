@@ -96,7 +96,7 @@ objects:
         from:
           kind: ImageStreamTag
           name: wildfly-81-centos7:latest
-          namespace: openshift
+          namespace: kafka 
       type: Docker
     triggers:
     - github:
@@ -151,7 +151,7 @@ objects:
         from:
           kind: ImageStreamTag
           name: centos7:latest
-          namespace: openshift
+          namespace: kafka
       type: Docker
     triggers:
     - github:
