@@ -117,7 +117,7 @@ objects:
     resources: {}
     source:
       git:
-        uri: https://github.com/jorisjumanne/kafka-openshift.git 
+        uri: https://github.com/jorisjumanne/kafka-openshift.git
       type: Git
     strategy:
       dockerStrategy:
@@ -139,7 +139,7 @@ objects:
     resources: {}
     source:
       git:
-        uri: https://github.com/jorisjumanne/broker-discovery.git 
+        uri: https://github.com/jorisjumanne/broker-discovery.git
       secrets: []
       type: Git
     strategy:
@@ -270,6 +270,13 @@ objects:
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         securityContext: {}
+        readinessProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 9092
+          timeoutSeconds: 1
         terminationGracePeriodSeconds: 30
         volumes:
         - name: kafka-logs
@@ -326,6 +333,14 @@ objects:
           terminationMessagePath: /dev/termination-log
         dnsPolicy: ClusterFirst
         restartPolicy: Always
+        readinessProbe:
+          exec:
+            command:
+            - ps -ef | grep "[w]atch.sh"
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
         securityContext: {}
         serviceAccount: broker-discovery
         serviceAccountName: broker-discovery
@@ -378,6 +393,14 @@ objects:
           resources: {}
           terminationMessagePath: /dev/termination-log
         dnsPolicy: ClusterFirst
+        readinessProbe:
+          exec:
+            command:
+            - ps -ef | grep "[p]ython"
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
         restartPolicy: Always
         securityContext: {}
         terminationGracePeriodSeconds: 30
@@ -439,6 +462,13 @@ objects:
           - mountPath: /tmp/zookeeper
             name: zookeeper
         dnsPolicy: ClusterFirst
+        readinessProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 2181
+          timeoutSeconds: 1
         restartPolicy: Always
         securityContext: {}
         terminationGracePeriodSeconds: 30
