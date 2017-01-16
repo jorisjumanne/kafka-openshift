@@ -93,10 +93,6 @@ objects:
       type: Git
     strategy:
       dockerStrategy:
-        from:
-          kind: ImageStreamTag
-          name: base-centos7:latest
-          namespace: kafka 
       type: Docker
     triggers:
     - github:
@@ -148,10 +144,6 @@ objects:
       type: Git
     strategy:
       dockerStrategy:
-        from:
-          kind: ImageStreamTag
-          name: base-centos7:latest
-          namespace: kafka
       type: Docker
     triggers:
     - github:
