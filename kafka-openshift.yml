@@ -95,7 +95,7 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: wildfly-81-centos7:latest
+          name: base-centos7:latest
           namespace: kafka 
       type: Docker
     triggers:
@@ -150,7 +150,7 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: centos:7
+          name: base-centos7:latest
           namespace: kafka
       type: Docker
     triggers:
