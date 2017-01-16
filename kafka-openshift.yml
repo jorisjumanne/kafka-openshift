@@ -88,14 +88,14 @@ objects:
     source:
       git:
         ref: master
-        uri: https://git.eu.rabonet.com/polaris/zookeeper-webui.git
+        uri: https://meijerj@git.rabobank.nl/scm/~meijerj/zookeeper-webui.git
       secrets: []
       type: Git
     strategy:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: s2i-oracle-java-dev-rhel:latest
+          name: openshift/wildfly-81-centos7
           namespace: openshift
       type: Docker
     triggers:
@@ -121,22 +121,8 @@ objects:
     resources: {}
     source:
       git:
-        uri: https://git.eu.rabonet.com/polaris/kafkanetes.git
+        uri: https://meijerj@git.rabobank.nl/scm/~meijerj/kafka-openshift.git
       type: Git
-    strategy:
-      dockerStrategy:
-        env:
-        - name: http_proxy
-          value: http://proxy.linux.rabobank.nl:3128
-        - name: https_proxy
-          value: http://proxy.linux.rabobank.nl:3128
-        - name: HTTPS_PROXY
-          value: http://proxy.linux.rabobank.nl:3128
-        - name: no_proxy
-          value: .rabobank.nl,.rabobank.com,.rabonet.com
-        - name: HTTP_PROXY
-          value: http://proxy.linux.rabobank.nl:3128
-      type: Docker
     triggers:
     - type: ConfigChange
 - apiVersion: v1
@@ -154,14 +140,14 @@ objects:
     resources: {}
     source:
       git:
-        uri: https://git.eu.rabonet.com/polaris/broker-discovery.git
+        uri: https://meijerj@git.rabobank.nl/scm/~meijerj/broker-discovery.git
       secrets: []
       type: Git
     strategy:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: rhel7:latest
+          name: centos:latest
           namespace: openshift
       type: Docker
     triggers:
