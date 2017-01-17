@@ -4,6 +4,14 @@ metadata:
   name: kafkanetes
 objects:
 - apiVersion: v1
+  data:
+    server.keystore.jks: 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
+    server.truststore.jks: /u3+7QAAAAIAAAABAAAAAgAFbXlrZXkAAAFTE6hZdAAFWC41MDkAAAUrMIIFJzCCAw+gAwIBAgIQcwPKqE3k0oZPLQMvBXamPDANBgkqhkiG9w0BAQsFADAmMSQwIgYDVQQDExtSYWJvYmFuayBHcm91cCBSb290IENBIDIwMTQwHhcNMTQxMDIyMTMyNzMzWhcNMzQxMDIyMTMzNTQzWjAmMSQwIgYDVQQDExtSYWJvYmFuayBHcm91cCBSb290IENBIDIwMTQwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDa5boiStoSpMPHzgyspIt1z1L1zLRLoSIlIkGzsfzzAZWyiPb2GeCJQgw8NID/VdbQUgJAqnRXBJ64HJPviU6gBNC8ytgCR1iom2LZdRV4AloXwaOk9BUAI5n7F126iDSidqf4SMytvks5ls4UiM1iDi2QLcaf3TaVxvbtM+8X4/wfwX3JZ2SmuhwwCk8bKgls1lMwEawYTY6fQVNydMZMa4frNo4UAA3lmR7GaKD0XcGfVcu75MBhJnmu2IOW0iuIS/JliyBMO4SZgjsdiPkRjnUXmiLzXsG6iNBlrfEWXLlZpuAAO7PT6lq9Q/pAG6047E7MxzGVlJauzRctww6/gSX2VXwJHo4NcOUvgfP9KFZ+U09ypps1pXp5Dr8SKCfvyW5C4/zfB+OqszDg7LTOkrkuJt7kbQoZz7JW+sgvW01oiE0L2eJzRC6VcFtXw9nWteQ6EQzjbrvMgGVtWTFueG3z7c/qjfyxPRYxFvV35VutvAVTjm/yVkO/foGrA7cx6juIG7IR56rWM+6WTT65Yz9KIzXHF/Pb7hKqapTtcK/qQ96jLz0/xNmnpxcrPLYxYEclMaGIJhH7SeaaOFWuB+Ym6lD990Pc6JIJZbTqyLdpBWYedbqWv/OeoGjviExRYJRLl4m7jPUlTGcAuMz3j2Jy1Bjkmt7C5lZZRaigBwIDAQABo1EwTzALBgNVHQ8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUUx8sDnqQtcWShnp7O9Qlg2CfEf0wEAYJKwYBBAGCNxUBBAMCAQAwDQYJKoZIhvcNAQELBQADggIBAB9yZvCTJWl3ulJ17OKcbKC//rKfebcSx5IZBhPDgYZrgedy8PgW1xgvLIIRCMQxg/TiZPfMUL7JqJVyUSvdIEm5dFy8yB+NnkXPuUnhM+WFMcZaq5vvLH0EgGPPQuBDbZaJnUJwuv2E+It/OGNjdwGaowzgKzZUQy1bIjVhOpyjFKes0gIAVpth+aQHmpULODE6b2FLCxu5RHmAk3Rr3yWz6+SXLAC0cYUO0Y71kQRMCHBWS01jF4vVWxg38uOPzcAKFASVcfbx3/cxLZKJc6P8vq9EcJFqi3REswckiIBF4VxMoK4AL44D3k80y0+xTl/jXMifl1otKJ3nYFJK+u9+Y6tp+fDm7CBFNYpt+XxM7rgxrmerzFDYQFqOy5roD6Jff8CDQ3cpxUQVDwJBEDJFBodrX6pkZF00Vu8ih+YjHkCB2u259Kei7vR0wmTml4jSlsGysyYfGUZzMnkzhbiQIgLZp4Ml6HJZ6UgrkQxHFWcwDlS4K3NbwkwAjFlYa+Eg2/GM5SZph8hFxDi97mIsMUfqEz7gO8TomWQDnXXjf6ncVO1R/ZdhcYdWeBGuPmdrL2cFM0dYbeYs6csdjbome0W5hqiQ2ZEytZrkj9Bc8Hho+rqi0Luht0NQtj/GtnWZO6tA6Zii9y6flt0sAXDoTnX6LIipcwutBiYqnzbsvhjebCn+Ka9aH3cGeDtJY6KuFyA=
+  kind: Secret
+  metadata:
+    name: ssl
+  type: Opaque
+- apiVersion: v1
   kind: ServiceAccount
   metadata:
     name: broker-discovery
@@ -12,25 +20,36 @@ objects:
   metadata:
     name: zookeeperwebui
 - apiVersion: v1
-  kind: ImageStream
+  groupNames: null
+  kind: RoleBinding
   metadata:
-    generation: 1
-    labels:
-      app: kafkanetes
-    name: kafkanetes
+    name: view
+  roleRef:
+    name: view
+  subjects:
+  - kind: ServiceAccount
+    name: broker-discovery
 - apiVersion: v1
-  kind: ImageStream
+  groupNames: null
+  kind: RoleBinding
   metadata:
-    generation: 1
-    labels:
-      app: broker-discovery
+    name: system:endpoint-controller
+  roleRef:
+    name: system:endpoint-controller
+  subjects:
+  - kind: ServiceAccount
     name: broker-discovery
 - apiVersion: v1
   kind: ImageStream
   metadata:
-    generation: 1
-    labels:
-      app: zookeeper-webui
+    name: kafkanetes
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    name: broker-discovery
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
     name: zookeeper-webui
 - apiVersion: v1
   kind: PersistentVolumeClaim
@@ -75,8 +94,6 @@ objects:
 - apiVersion: v1
   kind: BuildConfig
   metadata:
-    labels:
-      app: zookeeper-webui
     name: zookeeper-webui
   spec:
     output:
@@ -105,8 +122,6 @@ objects:
 - apiVersion: v1
   kind: BuildConfig
   metadata:
-    labels:
-      app: kafkanetes
     name: kafkanetes
   spec:
     output:
@@ -158,13 +173,10 @@ objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    labels:
-      app: zookeeper-webui
     name: zookeeper-webui
   spec:
     replicas: 1
     selector:
-      app: zookeeper-webui
       deploymentconfig: zookeeper-webui
     strategy:
       resources: {}
@@ -178,7 +190,6 @@ objects:
     template:
       metadata:
         labels:
-          app: zookeeper-webui
           deploymentconfig: zookeeper-webui
       spec:
         containers:
@@ -298,8 +309,6 @@ objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    labels:
-      app: broker-discovery
     name: broker-discovery
   spec:
     replicas: 1
@@ -319,7 +328,6 @@ objects:
         annotations:
           openshift.io/container.broker-discovery.image.entrypoint: '["/bin/bash"]'
         labels:
-          app: broker-discovery
           deploymentconfig: broker-discovery
       spec:
         containers:
@@ -334,7 +342,9 @@ objects:
           readinessProbe:
             exec:
               command:
-              - ps -ef | grep "[w]atch.sh"
+              - grep
+              - sleeping
+              - /proc/1/task/1/status
             failureThreshold: 3
             periodSeconds: 10
             successThreshold: 1
@@ -434,7 +444,6 @@ objects:
     template:
       metadata:
         labels:
-          app: kafkanetes-zk
           service: kafkanetes-zk
           deploymentconfig: kafkanetes-zk-1
       spec:
@@ -516,7 +525,6 @@ objects:
           openshift.io/generated-by: OpenShiftNewApp
         creationTimestamp: null
         labels:
-          app: kafkanetes-zk
           service: kafkanetes-zk
           deploymentconfig: kafkanetes-zk-2
       spec:
@@ -588,7 +596,6 @@ objects:
     template:
       metadata:
         labels:
-          app: kafkanetes-zk
           service: kafkanetes-zk
           deploymentconfig: kafkanetes-zk-3
       spec:
