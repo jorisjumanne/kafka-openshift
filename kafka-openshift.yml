@@ -291,8 +291,7 @@ objects:
         terminationGracePeriodSeconds: 30
         volumes:
         - name: kafka-logs
-          persistentVolumeClaim:
-            claimName: kafka
+          emptyDir: {}
         - name: kafka-keystores
           secret:
             secretName: ssl
@@ -490,8 +489,7 @@ objects:
         terminationGracePeriodSeconds: 30
         volumes:
         - name: zookeeper
-          persistentVolumeClaim:
-            claimName: kafkanetes-zk-1
+          emptyDir: {}
     test: false
     triggers:
     - type: ConfigChange
@@ -564,8 +562,7 @@ objects:
         terminationGracePeriodSeconds: 30
         volumes:
         - name: zookeeper
-          persistentVolumeClaim:
-            claimName: kafkanetes-zk-2
+          emptyDir: {}
     test: false
     triggers:
     - type: ConfigChange
@@ -635,8 +632,7 @@ objects:
         terminationGracePeriodSeconds: 30
         volumes:
         - name: zookeeper
-          persistentVolumeClaim:
-            claimName: kafkanetes-zk-3
+          emptyDir: {}
     test: false
     triggers:
     - type: ConfigChange
