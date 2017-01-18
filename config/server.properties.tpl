@@ -120,7 +120,7 @@ zookeeper.connect=${KAFKANETES_ZK_SERVICE_HOST}:${KAFKANETES_ZK_SERVICE_PORT}
 # Timeout in ms for connecting to zookeeper
 zookeeper.connection.timeout.ms=6000
 
-advertised.listeners=SSL://${HOSTNAME}-${OPENSHIFT_BUILD_NAMESPACE}.apps.ota.ose.rabobank.nl:443
+advertised.listeners=SSL://${HOSTNAME}-${OPENSHIFT_BUILD_NAMESPACE}.192.168.99.9093.xip.io:9093
 
 ssl.keystore.password=notsecret
 ssl.key.password=notsecret
