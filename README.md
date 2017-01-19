@@ -4,7 +4,6 @@
 oc login -u system:admin
 oc new-project kafka
 oc -f kafka-openshift.yml
-oc secrets new ssl ssl
 oc new-app --template=kafkanetes
 oc policy add-role-to-user admin -z broker-discovery
 oc adm policy add-cluster-role-to-user cluster-admin admin
