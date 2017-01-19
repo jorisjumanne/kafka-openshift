@@ -1,7 +1,8 @@
 # "Kafkanetes"
 
 ```bash
-oc create -n openshift -f kafka-openshift.yml
+oc login -u system:admin
+oc -f kafka-openshift.yml
 oc secrets new ssl ssl
 oc new-app --template=kafkanetes
 oc policy add-role-to-user admin -z broker-discovery
