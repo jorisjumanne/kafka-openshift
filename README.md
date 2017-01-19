@@ -5,6 +5,7 @@ oc create -n openshift -f kafka-openshift.yml
 oc secrets new ssl ssl
 oc new-app --template=kafkanetes
 oc policy add-role-to-user admin -z broker-discovery
+oc adm policy add-cluster-role-to-user cluster-admin admin
 ```
 
 Run [Apache Kafka](https://kafka.apache.org/) and [Apache ZooKeeper](https://zookeeper.apache.org/) on [OpenShift v3](https://www.openshift.com/).

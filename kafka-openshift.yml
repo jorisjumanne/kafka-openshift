@@ -756,3 +756,13 @@ objects:
     to:
       kind: Service
       name: zookeeper-webui
+- apiVersion: v1
+  kind: Route
+  metadata:
+    labels:
+      run: kafkanetes-zk
+    name: kafkanetes-zk
+  spec:
+    to:
+      kind: Service
+      name: kafkanetes-zk
