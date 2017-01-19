@@ -2,9 +2,9 @@
 
 ```bash
 oc login -u system:admin
+oc policy add-role-to-user admin -z broker-discovery
 oc new-project kafka
-oc -f kafka-openshift.yml
-oc new-app --template=kafkanetes
+oc new-app kafka-openshift.yml
 oc policy add-role-to-user admin -z broker-discovery
 oc adm policy add-cluster-role-to-user cluster-admin admin
 ```

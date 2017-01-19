@@ -23,9 +23,9 @@ objects:
   groupNames: null
   kind: RoleBinding
   metadata:
-    name: view
+    name: admin 
   roleRef:
-    name: view
+    name: admin
   subjects:
   - kind: ServiceAccount
     name: broker-discovery
